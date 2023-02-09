@@ -10,7 +10,6 @@ import AuthRouter from "./routes/AuthRouter";
 // config
 dotenv.config();
 const app = express();
-const router = express.Router();
 app.use(cors());
 app.use(express.json());
 

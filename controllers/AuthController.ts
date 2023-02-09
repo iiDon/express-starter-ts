@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import bycrypt from "bcrypt";
-// import cookieParser from "cookie-parser";
 import prisma from "../prisma/client";
 
 //  register
