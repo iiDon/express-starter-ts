@@ -1,10 +1,12 @@
 {
   "name": "express-starter-ts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
+  "bin": "./bin/cli.js",
   "license": "MIT",
   "scripts": {
     "start": "node ./build/index.js",
+    "postinstall": "npx husky install",
     "build": "tsc -p .",
     "dev": "nodemon ./index.ts"
   },
