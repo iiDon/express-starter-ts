@@ -33,6 +33,8 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 // import routers
 const UserRouter_1 = __importDefault(require("./routes/UserRouter"));
 const AuthRouter_1 = __importDefault(require("./routes/AuthRouter"));
+const MosqueRouter_1 = __importDefault(require("./routes/MosqueRouter"));
+const HalqahRouter_1 = __importDefault(require("./routes/HalqahRouter"));
 // config
 dotenv.config();
 const app = (0, express_1.default)();
@@ -50,3 +52,5 @@ app.listen(PORT, () => {
 app.use((0, cookie_parser_1.default)());
 app.use("/api/", AuthRouter_1.default);
 app.use("/api/users", isAuthed_1.default, UserRouter_1.default);
+app.use("/api/mosques", isAuthed_1.default, MosqueRouter_1.default);
+app.use("/api/halqah", isAuthed_1.default, HalqahRouter_1.default);

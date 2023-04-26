@@ -23,10 +23,16 @@ const isAuthed = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
         const userId = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
         const user = yield client_1.default.user.findUnique({
             where: { id: userId.userId },
+            select: {
+                id: true,
+                mosqueId: true,
+                role: true,
+            },
         });
         if (!user) {
             return res.status(401).json({ error: "User not found" });
         }
+        res.locals.user = user;
         next();
     }
     catch (error) {

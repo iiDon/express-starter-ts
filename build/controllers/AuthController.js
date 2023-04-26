@@ -30,6 +30,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         data: {
             email,
             password: hashedPassword,
+            mosqueId: "clefu4brr0000v9mor274gns5",
         },
     });
     res.status(201).json("You have sucessfuly registered");

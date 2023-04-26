@@ -18,15 +18,20 @@ const isAuthed = async (req: Request, res: Response, next: NextFunction) => {
 
     const user = await prisma.user.findUnique({
       where: { id: userId.userId },
+      select: {
+        id: true,
+        mosqueId: true,
+        role: true,
+      },
     });
 
     if (!user) {
       return res.status(401).json({ error: "User not found" });
     }
-
+    res.locals.user = user;
     next();
   } catch (error) {
-    return res.status(401).json({ error: "Request is not authorized1" });
+    return res.status(401).json({ error: "Request is not authorized" });
   }
 };
 

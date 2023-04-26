@@ -10,17 +10,161 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model User {
-    id       String  @id @default(cuid())
-    email    String  @unique
-    password String
-    // role     Role    @default(USER)
-    name     String?
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String
+  emailVerified DateTime?
+  image         String?
+  role          String    @default("user")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Mosque   Mosque? @relation(fields: [mosqueId], references: [id])
+  mosqueId String?
 }
 
 // enum Role {
 //     ADMIN
 //     USER
 // }
+
+model Mosque {
+  id      String  @id @default(cuid())
+  name    String
+  address String?
+  image   String?
+
+  student     Student[]
+  user        User[]
+  halaqah     Halaqah[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Product     Product[]
+  Order       Order[]
+  settingsId  Settings?
+  MessageForm MessageForm[]
+  Point       Point[]
+}
+
+model Halaqah {
+  id   String @id @default(cuid())
+  name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Mosque     Mosque       @relation(fields: [mosqueId], references: [id])
+  mosqueId   String
+  Student    Student[]
+  Attendance Attendance[]
+}
+
+model Student {
+  id          String  @id @default(cuid())
+  name        String
+  RFID        String? @unique
+  phone       String?
+  parentName  String?
+  parentPhone String?
+  point       Int     @default(0)
+  image       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Halaqah    Halaqah?     @relation(fields: [halaqahId], references: [id])
+  halaqahId  String?
+  Attendance Attendance[]
+  Order      Order[]
+  Point      Point[]
+  Mosque     Mosque?      @relation(fields: [mosqueId], references: [id])
+  mosqueId   String?
+}
+
+model Attendance {
+  id     String   @id @default(cuid())
+  date   DateTime @default(now())
+  status String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Student   Student? @relation(fields: [studentId], references: [id])
+  studentId String?
+  Halaqah   Halaqah  @relation(fields: [halaqahId], references: [id])
+  halaqahId String
+}
+
+model Point {
+  id           String  @id @default(cuid())
+  name         String
+  value        Int
+  note         String?
+  isAttendance Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Student   Student @relation(fields: [studentId], references: [id])
+  studentId String
+  Mosque    Mosque  @relation(fields: [mosqueId], references: [id], onDelete: Cascade)
+  mosqueId  String
+}
+
+model Product {
+  id    String @id @default(cuid())
+  name  String
+  price Int
+  qty   Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Mosque   Mosque @relation(fields: [mosqueId], references: [id])
+  mosqueId String
+}
+
+model Order {
+  id          String  @id @default(cuid())
+  status      String
+  total       Int
+  isDelivered Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Student   Student @relation(fields: [studentId], references: [id])
+  studentId String
+  Mosque    Mosque  @relation(fields: [mosqueId], references: [id])
+  mosqueId  String
+}
+
+model Settings {
+  id            String   @id @default(cuid())
+  name          String
+  attendTime    DateTime
+  lateTime      Int?     @default(0)
+  attendTimeEnd DateTime
+  usernameSMS   String?
+  passwordSMS   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Mosque   Mosque @relation(fields: [mosqueId], references: [id])
+  mosqueId String @unique
+}
+
+model MessageForm {
+  id      String @id @default(cuid())
+  title   String
+  message String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Mosque    Mosque?  @relation(fields: [mosqueId], references: [id])
+  mosqueId  String?
+}

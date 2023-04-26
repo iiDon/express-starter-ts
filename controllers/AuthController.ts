@@ -25,6 +25,7 @@ const register = async (req: Request, res: Response) => {
     data: {
       email,
       password: hashedPassword,
+      mosqueId: "clefu4brr0000v9mor274gns5",
     },
   });
 

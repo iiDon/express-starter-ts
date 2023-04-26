@@ -2,14 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import prisma from "../prisma/client";
 
 const getAllUsers = async (req: Request, res: Response) => {
-  const id: string = req.body.userId;
-
-  const user = await prisma.user.findUnique({ where: { id } });
-
-  if (!user) return res.status(404).json({ Error: "User not found" });
-
-  // if (user.role !== "ADMIN")
-  //   return res.status(401).json({ Error: "Sorry you are not admin" });
+  if (res.locals.user.role !== "ADMIN")
+    return res.status(401).json({ Error: "Sorry you are not admin" });
 
   const users = await prisma.user.findMany({
     select: {
@@ -22,7 +16,7 @@ const getAllUsers = async (req: Request, res: Response) => {
 };
 
 const me = async (req: Request, res: Response) => {
-  const id: string = await req.body.userId;
+  const id: string = await res.locals.user.userId;
 
   if (!id) return res.status(404).json({ Error: "User Id not found" });
 

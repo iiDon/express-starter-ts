@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const route = (0, express_1.Router)();
+const MosqueController_1 = require("../controllers/MosqueController");
+route.get("/", MosqueController_1.getAllMosque);
+route.get("/:id", MosqueController_1.getMosque);
+route.post("/", MosqueController_1.createMosque);
+route.put("/:id", MosqueController_1.updateMosque);
+route.delete("/:id", MosqueController_1.deleteMosque);
+exports.default = route;
